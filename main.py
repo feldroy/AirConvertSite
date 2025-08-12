@@ -16,8 +16,13 @@ async def submit(request: air.Request):
     if code := form.get("code"):
         code = air_convert.html_to_airtags(code)
         html_code = highlight(code, lexer, formatter)
-        return air.Article(air.tags.Raw(html_code), id="result", hx_swap_oob='true')
-    return air.Children(air.Article("Nothing", id="result", hx_swap_oob=''))
+        return air.Div(
+            air.Article(air.tags.Raw(html_code), id="result", hx_swap_oob='true')
+        )
+    return air.Children(
+        air.Article("Nothing", id="result", hx_swap_oob=''),
+
+    )
 
 
 @app.page
@@ -40,5 +45,60 @@ async def index():
             hx_trigger="keyup",
             hx_swap="none",
         ),
-        air.Article(air.Pre(air.Code('Code will go here')), id="result"),
+        air.Div(
+            air.Article(air.Pre(air.Code('Code will go here')), id="result"),
+            air.Button(
+                air.tags.Raw("""
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="darkgrey" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="m5 15-4-4 4-4"></path>
+                        <path d="M5 9V5a2 2 0 0 1 2-2h4"></path>
+                    </svg>
+                """),
+                onclick="copyArticleContent()",
+                id="copy-btn",
+                title="Copy to clipboard"
+            ),
+            style="position: relative;"
+        ),
+        air.Style("""
+            #copy-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(255, 255, 255, 0.9);
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 8px;
+                cursor: pointer;
+                transition: all 0.2s;
+                z-index: 10;
+            }
+            #copy-btn:hover {
+                background: rgba(255, 255, 255, 1);
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            #copy-btn svg {
+                display: block;
+            }
+        """),
+        air.Script("""
+            function copyArticleContent() {
+                const article = document.getElementById('result') || document.getElementById('article');
+                if (article) {
+                    const text = article.innerText || article.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const btn = document.getElementById('copy-btn');
+                        btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="green" stroke-width="2"><polyline points="20,6 9,17 4,12"></polyline></svg>';
+                        setTimeout(() => {
+                            btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="m5 15-4-4 4-4"></path>
+                                <path d="M5 9V5a2 2 0 0 1 2-2h4"></path>
+                            </svg>`;
+                        }, 2000);
+                    });
+                }
+            }
+        """),
     )
