@@ -31,6 +31,7 @@ async def index():
         air.Title(title),
         air.Style(formatter.get_style_defs(".highlight")),
         air.H1(title),
+        air.P(air.A('A tool for the Air web framework', href='https://airdocs.fastapicloud.dev/')),
         air.Form(
             air.Textarea(
                 id="code",
@@ -84,7 +85,7 @@ async def index():
             #copy-btn svg {
                 display: block;
             }
-        """),
+        """, class_='control'),
         air.Script("""
             function copyArticleContent() {
                 const article = document.getElementById('result') || document.getElementById('article');
@@ -103,5 +104,5 @@ async def index():
                     });
                 }
             }
-        """),
+        """, class_='control'),
     )
