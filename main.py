@@ -17,11 +17,10 @@ async def submit(request: air.Request):
         code = air_convert.html_to_airtags(code)
         html_code = highlight(code, lexer, formatter)
         return air.Div(
-            air.Article(air.tags.Raw(html_code), id="result", hx_swap_oob='true')
+            air.Article(air.tags.Raw(html_code), id="result", hx_swap_oob="true")
         )
     return air.Children(
-        air.Article("Nothing", id="result", hx_swap_oob=''),
-
+        air.Article("Nothing", id="result", hx_swap_oob=""),
     )
 
 
@@ -30,7 +29,7 @@ async def index():
     title = "Convert HTML to Air Tags"
     return air.layouts.mvpcss(
         air.Title(title),
-        air.Style(formatter.get_style_defs('.highlight')),
+        air.Style(formatter.get_style_defs(".highlight")),
         air.H1(title),
         air.Form(
             air.Textarea(
@@ -46,20 +45,24 @@ async def index():
             hx_swap="none",
         ),
         air.Div(
-            air.Article(air.Pre(air.Code('Code will go here')), id="result"),
+            air.Article(air.Pre(air.Code("Code will go here")), id="result"),
             air.Button(
-                air.tags.Raw("""
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="darkgrey" stroke-width="2">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                        <path d="m5 15-4-4 4-4"></path>
-                        <path d="M5 9V5a2 2 0 0 1 2-2h4"></path>
-                    </svg>
-                """),
+                air.svg.Svg(
+                    air.svg.Rect(x="9", y="9", width="13", height="13", rx="2", ry="2"),
+                    air.svg.Path(d="m5 15-4-4 4-4"),
+                    air.svg.Path(d="M5 9V5a2 2 0 0 1 2-2h4"),
+                    width="20",
+                    height="20",
+                    viewbox="0 0 24 24",
+                    fill="none",
+                    stroke="darkgrey",
+                    stroke_width="2",
+                ),
                 onclick="copyArticleContent()",
                 id="copy-btn",
-                title="Copy to clipboard"
+                title="Copy to clipboard",
             ),
-            style="position: relative;"
+            style="position: relative;",
         ),
         air.Style("""
             #copy-btn {
