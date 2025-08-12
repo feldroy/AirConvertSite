@@ -25,8 +25,8 @@ async def index():
     title = "Convert HTML to Air Tags"
     return air.layouts.mvpcss(
         air.Title(title),
-        air.H1(title),
         air.Style(formatter.get_style_defs('.highlight')),
+        air.H1(title),
         air.Form(
             air.Textarea(
                 id="code",
@@ -42,4 +42,3 @@ async def index():
         ),
         air.Article(air.Pre(air.Code('Code will go here')), id="result"),
     )
-
