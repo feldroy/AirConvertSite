@@ -17,36 +17,7 @@ async def submit(request: air.Request):
         code = air_convert.html_to_airtags(code)
         html_code = highlight(code, lexer, formatter)
         return air.Div(
-            air.Article(air.tags.Raw(html_code), id="result", hx_swap_oob="true")
-        )
-    return air.Children(
-        air.Article("Nothing", id="result", hx_swap_oob=""),
-    )
-
-
-@app.page
-async def index():
-    title = "Convert HTML to Air Tags"
-    return air.layouts.mvpcss(
-        air.Title(title),
-        air.Style(formatter.get_style_defs(".highlight")),
-        air.H1(title),
-        air.P(air.A('A tool for the Air web framework', href='https://airdocs.fastapicloud.dev/')),
-        air.Form(
-            air.Textarea(
-                id="code",
-                name="code",
-                rows="8",
-                cols="80",
-                placeholder="Paste HTML here...",
-                autofocus=True,
-            ),
-            hx_post="/submit",
-            hx_trigger="keyup",
-            hx_swap="none",
-        ),
-        air.Div(
-            air.Article(air.Pre(air.Code("Code will go here")), id="result"),
+            air.Article(air.tags.Raw(html_code)),
             air.Button(
                 air.svg.Svg(
                     air.svg.Rect(x="9", y="9", width="13", height="13", rx="2", ry="2"),
@@ -62,10 +33,8 @@ async def index():
                 onclick="copyArticleContent()",
                 id="copy-btn",
                 title="Copy to clipboard",
-            ),
-            style="position: relative;",
-        ),
-        air.Style("""
+            ),            
+            air.Style("""
             #copy-btn {
                 position: absolute;
                 top: 10px;
@@ -85,8 +54,8 @@ async def index():
             #copy-btn svg {
                 display: block;
             }
-        """, class_='control'),
-        air.Script("""
+        """),
+            air.Script("""
             function copyArticleContent() {
                 const article = document.getElementById('result') || document.getElementById('article');
                 if (article) {
@@ -104,5 +73,43 @@ async def index():
                     });
                 }
             }
-        """, class_='control'),
+        """),
+            id="result",
+            hx_swap_oob="true",
+            style="position: relative;",
+        )
+    return air.Children(
+        air.Article("Nothing", hx_swap_oob="", id="result"),
+    )
+
+
+@app.page
+async def index():
+    title = "Convert HTML to Air Tags"
+    return air.layouts.mvpcss(
+        air.Title(title),
+        air.Style(formatter.get_style_defs(".highlight")),
+        air.H1(title),
+        air.P(
+            air.A(
+                "A tool for the Air web framework",
+                href="https://airdocs.fastapicloud.dev/",
+            )
+        ),
+        air.Form(
+            air.Textarea(
+                id="code",
+                name="code",
+                rows="8",
+                cols="80",
+                placeholder="Paste HTML here...",
+                autofocus=True,
+            ),
+            hx_post="/submit",
+            hx_trigger="keyup",
+            hx_swap="none",
+        ),
+        air.Div(
+            air.Article(air.Pre(air.Code("Code will go here")), id="result"),
+        ),
     )
