@@ -1,5 +1,4 @@
 import air
-import air_convert
 from pygments import highlight
 from pygments.lexers import PythonLexer
 from pygments.formatters import HtmlFormatter
@@ -14,7 +13,7 @@ formatter = HtmlFormatter()
 async def submit(request: air.Request):
     form = await request.form()
     if code := form.get("code"):
-        code = air_convert.html_to_airtags(code)
+        code = air.BaseTag.from_html_to_source(code)
         html_code = highlight(code, lexer, formatter)
         return air.Div(
             air.Article(air.tags.Raw(html_code)),
