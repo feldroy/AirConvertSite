@@ -9,3 +9,7 @@ dependencies = [
     "ruff>=0.12.8",
     "pygments>=2.19.2",
 ]
+
+
+[tool.fastapi]
+entrypoint = "main:app"
