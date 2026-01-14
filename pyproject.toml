@@ -8,6 +8,7 @@ dependencies = [
     "air[standard]>=0.45.0",
     "ruff>=0.12.8",
     "pygments>=2.19.2",
+    "fastapi-cli>=0.0.16",
 ]
 
 
