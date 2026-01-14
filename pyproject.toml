@@ -9,7 +9,7 @@ dependencies = [
     "ruff>=0.12.8",
     "pygments>=2.19.2",
     "fastapi-cli>=0.0.20",
-    "fastapi-cloud-cli>=0.6.0",
+    "fastapi-cloud-cli>=0.10.1",
 ]
 
 
